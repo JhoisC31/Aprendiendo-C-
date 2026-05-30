@@ -2,29 +2,51 @@
 #include "solucion.h"
 #include "logica.h"
 
-
 #include <iostream>
 using namespace std;
 
-/*
-* Implementar esta función.
-* Dependiendo el estado del juego esta debe retornar:  
+char winer = '_';
 
-GANO_X: Si Ha ganado el jugador X
-GANO_O: Si Ha ganado el jugador O
-EMPATE: Si ya se llenaron todas las casillas y no hay ganador
-JUEGO_EN_CURSO: Si el juego aún no se ha terminado.
-*/
 int GetEstado()
 {
-    /*
-    Puedes acceder a las casillas del tablero mediante el arreglo de 
-    dos dimensiones tablero.  
+    char** t = GetTablero();
 
-    Los índices empiezan en cero, de modo que puedes acceder a la segunda fila, primera columna 
-    de la siguiente manera:
-    tablero[1][0]
-    */
-    char** tablero = GetTablero();
-    return JUEGO_EN_CURSO;
+    /* Diagonales */
+    if(t[1][1] != '_')
+    {
+        if(t[0][0] == t[1][1] && t[1][1] == t[2][2])
+        {
+            winer = t[1][1];
+            return winer == 'X' ? GANO_X : GANO_O;
+        }
+        if(t[0][2] == t[1][1] && t[1][1] == t[2][0])
+        {
+            winer = t[1][1];
+            return winer == 'X' ? GANO_X : GANO_O;
+        }
+    }
+
+    /* Columnas y filas */
+    for(int i = 0; i < 3; i++)
+    {
+        if(t[i][0] != '_' && t[i][0] == t[i][1] && t[i][0] == t[i][2])
+        {
+            winer = t[i][0];
+            return winer == 'X' ? GANO_X : GANO_O;
+        }
+
+        if(t[0][i] != '_' && t[0][i] == t[1][i] && t[0][i] == t[2][i])
+        {
+            winer = t[0][i];
+            return winer == 'X' ? GANO_X : GANO_O;
+        }
+    }
+
+    /* juego en Curso empate */
+    int vacias = 0;
+    for(int i = 0; i < 3; i++)
+        for(int j = 0; j < 3; j++)
+            if(t[i][j] == '_') vacias++;
+
+    return vacias > 0 ? JUEGO_EN_CURSO : EMPATE;
 }
