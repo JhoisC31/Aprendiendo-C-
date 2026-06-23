@@ -6,11 +6,15 @@ Pila::Pila(): _ultimo(NULL)
 
 void Pila::Agregar(Elemento* elemento)
 {
-    /* Llenar este método con su implementación de Agregar elemento a la pila */
+    elemento->SetSiguiente(_ultimo);
+    _ultimo = elemento;
 }
 
 Elemento* Pila::Extraer()
 {
-    /* Llenar este método con su implementación de Extraer un elemento de la pila */
-    return NULL;
+    Elemento* tope = _ultimo;
+    _ultimo = (_ultimo != NULL) ? _ultimo->GetSiguiente() : NULL;
+    (tope != NULL) ? tope->SetSiguiente(NULL) : void();
+
+    return tope;
 }
